@@ -126,10 +126,10 @@ const compareContainer = (currentContainer, container) => {
 //   enthält, um Option-Elemente zu generieren. Für
 //   Objects wird das entsprechende Key erwartet.
 // ====================================================
-const createOptionsFromArray = (array, key = null) => {
+const createOptionsFromArray = (optionContentArray, key = null) => {
     const docFrag = document.createDocumentFragment();
 
-    array.forEach((element) => {
+    optionContentArray.forEach((element) => {
         if (key) element = element[key];
         const option = createOption(element);
 
@@ -142,30 +142,26 @@ const createOptionsFromArray = (array, key = null) => {
 const addOptionsToSelect = (selectElement, options) => {
     selectElement.appendChild(options);
 };
-
 // =============================================================
-//   storedOptionContent kann entweder ein String sein
+//   optionContent kann entweder ein String sein
 //   oder ein Array, das String-Werte oder Objects
-//   enthält. Daraus werden die Texte für die Optionen
-//   generiert, um das Formular dynamisch zu aktualisieren.
-//   Durch die Flexibilität der Funktion kann die
-//   vorhandene Daten-Struktur der Produkte verarbeitet werden.
+//   enthält. So kann die Funktion an mehreren Stellen
+//   für ein UI-Update aufgerufen werden.
 // =============================================================
-
 const updateFormSelect = (
-    storedOptionContent,
+    optionContent,
     selectElement,
     defaultOptionText,
     key
 ) => {
     if (selectElement.hasChildNodes()) removeOptions(selectElement);
 
-    if (!Array.isArray(storedOptionContent)) {
-        const option = createOption(storedOptionContent);
+    if (!Array.isArray(optionContent)) {
+        const option = createOption(optionContent);
         addOptionsToSelect(selectElement, option);
         addDefaultOptionToSelect(selectElement, defaultOptionText);
     } else {
-        const options = createOptionsFromArray(storedOptionContent, key);
+        const options = createOptionsFromArray(optionContent, key);
         addOptionsToSelect(selectElement, options);
         addDefaultOptionToSelect(selectElement, defaultOptionText);
     }
@@ -182,8 +178,11 @@ const message = document.getElementById("message");
 const categories = getUniqueValues(products, "category");
 
 updateFormSelect(categories, categorySelect, "Kategorien...");
-const productsByCategory = Object.groupBy(products, ({ category }) => category);
-const productsByName = Object.groupBy(products, ({ name }) => name);
+const productsByCategory = Object.groupBy(
+    [...products],
+    ({ category }) => category
+);
+const productsByName = Object.groupBy([...products], ({ name }) => name);
 
 const cartArray = JSON.parse(localStorage.getItem("cart"));
 
@@ -207,7 +206,7 @@ removeAllButton.innerText = "Alle entfernen";
 function renderCartItems(cartArray) {
     cartContainer.innerHTML = "";
     cartArray.forEach((item, index) => {
-        const cartDisplay = document.createElement("article");
+        const cartDisplay = document.createElement("div");
         const displayCategory = document.createElement("span");
         const displayProduct = document.createElement("span");
         const displayContainer = document.createElement("span");
