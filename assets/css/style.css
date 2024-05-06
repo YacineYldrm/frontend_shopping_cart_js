@@ -1,3 +1,104 @@
-h1 {
-    color: blue;
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+}
+
+main {
+    padding-block: 5vh;
+    padding-inline: 3%;
+    display: flex;
+    font-family: sans-serif;
+    background-color: #2b3499;
+    color: #ffd099;
+}
+
+h4 {
+    margin-top: 2vh;
+    color: #f0f3ff;
+}
+
+.product__select__form {
+    display: flex;
+    flex-direction: column;
+    width: 30vmax;
+    gap: 2vh;
+    margin-top: 2vh;
+    margin-right: 20vh;
+}
+
+.cart__container {
+    width: 40vmax;
+    border-left: 0.5px solid #ff9209;
+    padding-left: 3%;
+    height: 100vh;
+}
+
+.cart_item_container > div {
+    margin-top: 4vh;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 0 0 10px 0 rgba(0, 0, 0, 0.24);
+    border-radius: 6px;
+    width: 100%;
+    background-color: #f0f3ff;
+    color: #2b3499;
+}
+
+.cart_item_container > div > span {
+    display: flex;
+    align-items: center;
+    border-bottom: 0.5px solid rgb(216, 216, 216);
+    height: 4vh;
+    padding-left: 3%;
+}
+
+.cart_item_container > div > span:nth-last-of-type() {
+    border-bottom: none;
+}
+.cart_item_container > div > span:nth-of-type(4) {
+    border-bottom: none;
+}
+
+input,
+select {
+    height: 4vh;
+    padding-left: 3%;
+    border-radius: 8px;
+    outline: none;
+    border: none;
+    background-color: #f0f3ff;
+}
+
+select,
+input[type="number"] {
+    color: #2b3499;
+}
+
+input[type="submit"]:hover,
+button:hover {
+    background-color: #fc8245;
+    cursor: pointer;
+}
+
+input[type="submit"] {
+    background-color: #ff6c22;
+    color: white;
+}
+
+button {
+    outline: none;
+    border: none;
+    border-bottom-left-radius: 6px;
+    border-bottom-right-radius: 6px;
+    background-color: #ff6c22;
+    color: white;
+    height: 2.6vh;
+}
+
+.remove_all_button {
+    margin-top: 4vh;
+    width: 100%;
+    height: 4vh;
+    border-radius: 8px;
 }

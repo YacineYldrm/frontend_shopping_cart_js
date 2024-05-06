@@ -200,6 +200,7 @@ submitButton.type = "submit";
 submitButton.value = "In den Warenkob";
 const cartContainer = document.getElementById("cartContainer");
 const removeAllButton = document.createElement("button");
+removeAllButton.className = "remove_all_button";
 removeAllButton.innerText = "Alle entfernen";
 
 // ========================================================
@@ -312,13 +313,14 @@ function renderCartItems(cartArray) {
         const displayContainer = document.createElement("span");
         const displayAmount = document.createElement("span");
         const removeButton = document.createElement("button");
+        displayAmount.id = index;
         removeButton.value = index;
         removeButton.innerText = "Entfernen";
 
-        displayCategory.innerText = `Kategorie: "${item.category}" | `;
-        displayProduct.innerText = `Produkt: "${item.name}" | `;
-        displayContainer.innerText = `Verpackungseinheit: "${item.container}" | `;
-        displayAmount.innerText = `Menge: ${item.amount} | `;
+        displayCategory.innerText = `Kategorie: "${item.category}"`;
+        displayProduct.innerText = `Produkt: "${item.name}"`;
+        displayContainer.innerText = `Verpackungseinheit: "${item.container}"`;
+        displayAmount.innerText = `Menge: ${item.amount}`;
 
         removeButton.addEventListener("click", handleRemoveItem);
         removeAllButton.addEventListener("click", handleResetCart);
@@ -362,9 +364,11 @@ const handleProductSubmit = (e) => {
 
     cartArray[foundProductIndex].amount =
         Number(cartArray[foundProductIndex].amount) + amount;
-    renderCartItems(cartArray);
+    const displayAmount = document.getElementById(foundProductIndex);
+    displayAmount.innerText = `Menge: ${cartArray[foundProductIndex].amount}`;
     console.log(cartArray);
 };
+
 categorySelect.addEventListener("change", handleCategorySelect);
 productNameSelect.addEventListener("change", handleProductSelect);
 productContainerSelect.addEventListener("change", handleContainerSelect);
