@@ -184,8 +184,6 @@ const productsByCategory = Object.groupBy(
 );
 const productsByName = Object.groupBy([...products], ({ name }) => name);
 
-const cartArray = JSON.parse(localStorage.getItem("cart"));
-
 // ========================================================
 //   Erzeugen von weiteren Formular Elementen
 // ========================================================
@@ -203,41 +201,6 @@ const cartContainer = document.getElementById("cartContainer");
 const removeAllButton = document.createElement("button");
 removeAllButton.innerText = "Alle entfernen";
 
-function renderCartItems(cartArray) {
-    cartContainer.innerHTML = "";
-    cartArray.forEach((item, index) => {
-        const cartDisplay = document.createElement("div");
-        const displayCategory = document.createElement("span");
-        const displayProduct = document.createElement("span");
-        const displayContainer = document.createElement("span");
-        const displayAmount = document.createElement("span");
-        const removeButton = document.createElement("button");
-        removeButton.value = index;
-        removeButton.innerText = "Entfernen";
-
-        displayCategory.innerText = `Kategorie: "${item.category}" | `;
-        displayProduct.innerText = `Produkt: "${item.name}" | `;
-        displayContainer.innerText = `Verpackungseinheit: "${item.container}" | `;
-        displayAmount.innerText = `Menge: ${item.amount} | `;
-
-        removeButton.addEventListener("click", handleRemoveItem);
-        removeAllButton.addEventListener("click", handleResetCart);
-        cartDisplay.append(
-            displayCategory,
-            displayProduct,
-            displayContainer,
-            displayAmount,
-            removeButton
-        );
-        cartContainer.appendChild(cartDisplay);
-    });
-    if (cartContainer.children.length >= 1) {
-        cartContainer.appendChild(removeAllButton);
-    }
-}
-
-renderCartItems(cartArray);
-
 // ========================================================
 //   Formular um weitere Felder erweitern:
 //   Dynamisches Aktualisieren von Selects
@@ -245,6 +208,7 @@ renderCartItems(cartArray);
 //   und FormData-Objekt mit Set aus Formular-Daten definieren
 // ========================================================
 const formData = new FormData();
+const cartArray = [];
 
 const resetFormData = () => {
     const currentFormData = Object.fromEntries(formData);
@@ -327,13 +291,12 @@ function handleRemoveItem() {
     console.log(productIndex);
 
     cartArray.splice(productIndex, 1);
-    localStorage.setItem("cart", JSON.stringify(cartArray));
+
     renderCartItems(cartArray);
 }
 
 function handleResetCart() {
     cartArray.length = 0;
-    localStorage.setItem("cart", JSON.stringify(cartArray));
     cartContainer.innerHTML = "";
     renderCartItems(cartArray);
 }
@@ -341,6 +304,39 @@ function handleResetCart() {
 // =========================================
 //   Warenkorb aktualisieren und ausgeben
 // =========================================
+
+function renderCartItems(cartArray) {
+    cartContainer.innerHTML = "";
+    cartArray.forEach((item, index) => {
+        const cartDisplay = document.createElement("div");
+        const displayCategory = document.createElement("span");
+        const displayProduct = document.createElement("span");
+        const displayContainer = document.createElement("span");
+        const displayAmount = document.createElement("span");
+        const removeButton = document.createElement("button");
+        removeButton.value = index;
+        removeButton.innerText = "Entfernen";
+
+        displayCategory.innerText = `Kategorie: "${item.category}" | `;
+        displayProduct.innerText = `Produkt: "${item.name}" | `;
+        displayContainer.innerText = `Verpackungseinheit: "${item.container}" | `;
+        displayAmount.innerText = `Menge: ${item.amount} | `;
+
+        removeButton.addEventListener("click", handleRemoveItem);
+        removeAllButton.addEventListener("click", handleResetCart);
+        cartDisplay.append(
+            displayCategory,
+            displayProduct,
+            displayContainer,
+            displayAmount,
+            removeButton
+        );
+        cartContainer.appendChild(cartDisplay);
+    });
+    if (cartContainer.children.length >= 1) {
+        cartContainer.appendChild(removeAllButton);
+    }
+}
 
 const handleProductSubmit = (e) => {
     e.preventDefault();
@@ -359,18 +355,15 @@ const handleProductSubmit = (e) => {
     const foundProductIndex = cartArray.findIndex(
         (product) => product.name === name
     );
-
     if (foundProductIndex === -1) {
         cartArray.push(selectedProduct);
         renderCartItems(cartArray);
-        localStorage.setItem("cart", JSON.stringify(cartArray));
         console.log(cartArray);
         return;
     }
 
     cartArray[foundProductIndex].amount =
         Number(cartArray[foundProductIndex].amount) + amount;
-    localStorage.setItem("cart", JSON.stringify(cartArray));
     renderCartItems(cartArray);
     console.log(cartArray);
 };
