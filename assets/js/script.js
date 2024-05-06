@@ -190,6 +190,7 @@ const productsByName = Object.groupBy([...products], ({ name }) => name);
 
 const productNameSelect = document.createElement("select");
 const productContainerSelect = document.createElement("select");
+addDefaultOptionToSelect(productContainerSelect, "Verpackungseinheit...");
 const productAmountInput = document.createElement("input");
 productAmountInput.type = "number";
 productAmountInput.placeholder = "Menge...";
@@ -228,8 +229,6 @@ function handleCategorySelect() {
     formData.set("category", selectedCategory);
     message.innerText = "";
 
-    console.log(Object.fromEntries(formData));
-
     const products = productsByCategory[selectedCategory];
 
     productSelectForm.append(
@@ -243,7 +242,7 @@ function handleCategorySelect() {
 
     productAmountInput.disabled = true;
     productContainerSelect.disabled = true;
-    addDefaultOptionToSelect(productContainerSelect, "Verpackungseinheit...");
+    productContainerSelect.firstChild.selected = true;
 }
 
 let currentContainer;
@@ -288,7 +287,6 @@ function handleAmountInput() {
 
 function handleRemoveItem() {
     const productIndex = Number(this.value);
-    console.log(productIndex);
 
     cartArray.splice(productIndex, 1);
 
